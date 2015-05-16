@@ -29,11 +29,13 @@
 
     <div class="container-fluid body-content">
         <div class="row">
-            <div class="col-lg-2 scrollable">
+            <div class="col-lg-2 scrollable left-column">
                 @{ Html.RenderAction("FileBrowser", "Partial"); }
             </div>
             <div class="col-lg-10">
-                @RenderBody()
+                <div class="main-content">
+                    @RenderBody()
+                </div>
             </div>
 
 
@@ -48,6 +50,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    @Scripts.Render("~/js/Application.js")
 </body>
 </html>
 <style>

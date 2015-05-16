@@ -5,7 +5,7 @@
 <p>
     @*    @Html.ActionLink("Create New", "Create")*@
 </p>
-<table class="table">
+<table class="table left-menu-table">
     <tr>
         <th>
             Nazwa
@@ -20,7 +20,8 @@
                 @{
                     var name = (item.Name.Length < 16) ? item.Name : item.Name.Substring(0, 16) + "...";
                 }
-                @Html.ActionLink(name, "Image", "Dicom", new {id = item.Name}, null)
+                <span class="img-name" id="@item.Name">@name</span>
+         
             </td>
             <td>
                 @Html.ActionLink("Szczegóły", "Details", "Dicom",  new { id = item.Name }, null)
