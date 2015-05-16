@@ -20,13 +20,25 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Lista plików", "Index", "Dicom")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
+
+
+
+    <div class="container-fluid body-content">
+        <div class="row">
+            <div class="col-lg-2 scrollable">
+                @{ Html.RenderAction("FileBrowser", "Partial"); }
+            </div>
+            <div class="col-lg-10">
+                @RenderBody()
+            </div>
+
+
+        </div>
+
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Eskulap</p>
@@ -38,3 +50,14 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<style>
+    body {
+    overflow:hidden;
+}
+
+     .scrollable {
+         overflow-y: scroll;
+         overflow-x: no-display;
+         height: 90vh
+     }
+</style>

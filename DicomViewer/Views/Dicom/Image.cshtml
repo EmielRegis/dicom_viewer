@@ -1,0 +1,9 @@
+﻿@model DicomViewer.Models.DicomImageBindModel
+
+@{
+    ViewBag.Title = "bind";
+}
+
+<div>
+    <img src='@Url.Action("GetImage", new {id = Model.Name})' alt="" />
+</div>

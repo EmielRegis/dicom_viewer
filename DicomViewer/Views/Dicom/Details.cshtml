@@ -3,50 +3,60 @@
 @{
     ViewBag.Title = "Details";
 }
+<div class="scrollable">
+    <h2>Szczegóły</h2>
 
-<h2>Szczegóły</h2>
+    <p>
+        @*    @Html.ActionLink("Create New", "Create")*@
+    </p>
 
-<p>
-@*    @Html.ActionLink("Create New", "Create")*@
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Tag)
-@*            @Html.na*@
-        </th>
-        <th>
-            Typ
-        </th>
-        <th>
-            Wielkość
-        </th>
-        <th>
-            Wartość
-        </th>
-        <th></th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tag)
+                @*            @Html.na*@
+            </th>
+            <th>
+                Typ
+            </th>
+            <th>
+                Wielkość
+            </th>
+            <th>
+                Wartość
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tag).ToHtmlString().Replace("\t", "---")
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Vr)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Length)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Value)
-        </td>
-        <td>
-@*            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
-@*            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-@*            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-        </td>
-    </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tag).ToHtmlString().Replace("\t", "---")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vr)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Length)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @*            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                    @*            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                    @*            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
 
-</table>
+    </table>
+</div>
+
+<style>
+    .scrollable {
+        overflow: scroll;
+        height: 90vh;
+    }
+</style>
