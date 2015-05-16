@@ -26,3 +26,8 @@ textarea {
 span.img-name {
     cursor: pointer;
 }
+
+.zoom-change-area {
+    position: absolute;
+    top: 0;
+}
