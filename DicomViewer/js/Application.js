@@ -69,14 +69,14 @@ function enableZoom(canvas, url) {
     });
 
     $('input.up').on('click', function () {
-        translation.y -= 5;
+        translation.y += 5;
         if (canvas && url) {
             changeZoom(canvas, url, zoom, translation);
         }
     });
 
     $('input.down').on('click', function () {
-        translation.y += 5;
+        translation.y -= 5;
         if (canvas && url) {
             changeZoom(canvas, url, zoom, translation);
         }
