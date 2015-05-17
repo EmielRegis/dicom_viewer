@@ -4,25 +4,17 @@ function fillCanvas(canvas, url, scale) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.canvas.width = $('.main-content').width();
     ctx.canvas.height = window.innerHeight;
-    if (scale) {
+    if (!scale) scale = 1;
+    imageObj = new Image();
+    imageObj.onload = function () {
+        var width = imageObj.naturalWidth;
+        var height = imageObj.naturalHeight;
+        ctx.translate(canvas.width / 2, canvas.height / 2);
         ctx.scale(scale, scale);
-    } else {
-        scale = 1;
-    }
-    if (imageObj && imageObj.src == '/Dicom/GetImage/' + url) {
-        var width = imageObj.naturalWidth *scale;
-        var height = imageObj.naturalHeight * scale;
-        ctx.drawImage(imageObj, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
-    } else {
-        imageObj = null;
-        imageObj = new Image();
-        imageObj.onload = function () {
-            var width = imageObj.naturalWidth * scale;
-            var height = imageObj.naturalHeight * scale;
-            ctx.drawImage(imageObj, (canvas.width -width) / 2, (canvas.height -height) / 2, width, height);
-        };
-        imageObj.src = '/Dicom/GetImage/' + url;
-    }
+        ctx.drawImage(imageObj, -width / 2, -height / 2);
+    };
+    imageObj.src = '/Dicom/GetImage/' + url;
+
 }
 
 function loadMainContent(reqUrl) {
@@ -35,32 +27,44 @@ function loadMainContent(reqUrl) {
     });
 }
 function reFillCanvasAfterAjax(url) {
-        canvas = document.getElementById("canvas");
-        fillCanvas(canvas, url);
-        return canvas;
+    canvas = document.getElementById("canvas");
+    fillCanvas(canvas, url);
+    return canvas;
 }
 
 function changeZoom(canvas, url, zoom) {
     fillCanvas(canvas, url, zoom);
-    
+
 }
 
 function enableZoom(canvas, url) {
     var zoom = 1;
-   $('canvas').bind('mousewheel', function (e) {
-       if (e.originalEvent.wheelDelta / 120 > 0) {
-           zoom += 0.5;
-       }
-       else {
-           if (zoom > 0.5) zoom -= 0.5;
-       }
-       if (canvas && url) {
-           changeZoom(canvas, url, zoom);
-       }
-   });
+    $('input.zoom-change').on('click', function () {
+        if ($(this).hasClass('zoom-in')) {
+            zoom += 0.25;
+        } else {
+            if (zoom > 0.25) zoom -= 0.25;
+        }
+        if (canvas && url) {
+            changeZoom(canvas, url, zoom);
+        }
+
+    });
+    $('canvas').bind('mousewheel', function (e) {
+        if (e.originalEvent.wheelDelta / 120 > 0) {
+            zoom += 0.25;
+        }
+        else {
+            if (zoom > 0.25) zoom -= 0.25;
+        }
+        if (canvas && url) {
+            changeZoom(canvas, url, zoom);
+        }
+    });
 }
 
 function unbindZoomCallback() {
+    $('input.zoom-change').unbind('click');
     $('canvas').unbind("mousewheel");
 }
 
@@ -84,12 +88,12 @@ $(document).ready(function () {
             });
         }
     });
-   
-   
 
-    
 
-   
+
+
+
+
 
 
 
