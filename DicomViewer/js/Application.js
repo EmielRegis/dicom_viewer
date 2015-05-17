@@ -4,18 +4,22 @@ function fillCanvas(canvas, url, scale) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.canvas.width = $('.main-content').width();
     ctx.canvas.height = window.innerHeight;
-    if (scale) ctx.scale(scale, scale);
+    if (scale) {
+        ctx.scale(scale, scale);
+    } else {
+        scale = 1;
+    }
     if (imageObj && imageObj.src == '/Dicom/GetImage/' + url) {
-        var width = imageObj.naturalWidth;
-        var height = imageObj.naturalHeight;
-        ctx.drawImage(imageObj, 0, 0, width, height);
+        var width = imageObj.naturalWidth *scale;
+        var height = imageObj.naturalHeight * scale;
+        ctx.drawImage(imageObj, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     } else {
         imageObj = null;
         imageObj = new Image();
         imageObj.onload = function () {
-            var width = imageObj.naturalWidth;
-            var height = imageObj.naturalHeight;
-            ctx.drawImage(imageObj, 0, 0, width, height);
+            var width = imageObj.naturalWidth * scale;
+            var height = imageObj.naturalHeight * scale;
+            ctx.drawImage(imageObj, (canvas.width -width) / 2, (canvas.height -height) / 2, width, height);
         };
         imageObj.src = '/Dicom/GetImage/' + url;
     }
@@ -43,20 +47,21 @@ function changeZoom(canvas, url, zoom) {
 
 function enableZoom(canvas, url) {
     var zoom = 1;
-   $('input.zoom-change').on('click', function () {
-        if ($(this).hasClass('zoom-in')) {
-            zoom++;
-        } else {
-           if(zoom > 1) zoom--;
-        }
-        if (canvas && url) {
-            changeZoom(canvas, url, zoom);
-        }
-    });
+   $('canvas').bind('mousewheel', function (e) {
+       if (e.originalEvent.wheelDelta / 120 > 0) {
+           zoom += 0.5;
+       }
+       else {
+           if (zoom > 0.5) zoom -= 0.5;
+       }
+       if (canvas && url) {
+           changeZoom(canvas, url, zoom);
+       }
+   });
 }
 
 function unbindZoomCallback() {
-    $('input.zoom-change').unbind("click");
+    $('canvas').unbind("mousewheel");
 }
 
 
