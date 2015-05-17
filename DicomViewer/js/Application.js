@@ -1,16 +1,24 @@
-﻿function fillCanvas(canvas, url, scale) {
+﻿var imageObj, zoomCallback;
+function fillCanvas(canvas, url, scale) {
     var ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.canvas.width = $('.main-content').width();
     ctx.canvas.height = window.innerHeight;
-    if(scale)ctx.scale(scale, scale);
-    var imageObj = new Image();
-    imageObj.onload = function () {
+    if (scale) ctx.scale(scale, scale);
+    if (imageObj && imageObj.src == '/Dicom/GetImage/' + url) {
         var width = imageObj.naturalWidth;
         var height = imageObj.naturalHeight;
         ctx.drawImage(imageObj, 0, 0, width, height);
-    };
-    imageObj.src = '/Dicom/GetImage/' + url;
+    } else {
+        imageObj = null;
+        imageObj = new Image();
+        imageObj.onload = function () {
+            var width = imageObj.naturalWidth;
+            var height = imageObj.naturalHeight;
+            ctx.drawImage(imageObj, 0, 0, width, height);
+        };
+        imageObj.src = '/Dicom/GetImage/' + url;
+    }
 }
 
 function loadMainContent(reqUrl) {
@@ -35,7 +43,7 @@ function changeZoom(canvas, url, zoom) {
 
 function enableZoom(canvas, url) {
     var zoom = 1;
-    $('input.zoom-change').on('click', function () {
+   $('input.zoom-change').on('click', function () {
         if ($(this).hasClass('zoom-in')) {
             zoom++;
         } else {
@@ -47,6 +55,10 @@ function enableZoom(canvas, url) {
     });
 }
 
+function unbindZoomCallback() {
+    $('input.zoom-change').unbind("click");
+}
+
 
 $(document).ready(function () {
     var canvas, url, zoom = 1;
@@ -55,6 +67,7 @@ $(document).ready(function () {
         url = $(this).attr('id')
         canvas = document.getElementById("canvas");
         if (canvas) {
+            unbindZoomCallback();
             fillCanvas(canvas, url);
             enableZoom(canvas, url);
         }
