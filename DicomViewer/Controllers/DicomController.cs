@@ -44,18 +44,17 @@ namespace DicomViewer.Controllers
 
                 DicomImage dicomImage = new DicomImage(dataset);
 
-                return Json(dicomImage.NumberOfFrames);
+                return Json(dicomImage.NumberOfFrames, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
             {
-                return Json(-1);
+                return Json(-1, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public ActionResult GetImage(string id)
+        [Route("Dicom/GetImage/{id}/{frame?}")]
+        public ActionResult GetImage(string id, int frame = 0)
         {
-            int frame = int.Parse(Request["frame"] ?? "0");
-
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -94,10 +93,9 @@ namespace DicomViewer.Controllers
             }
         }
 
-        public ActionResult GetImageMiniature(string id)
+        [Route("Dicom/GetImageMiniature/{id}/{frame?}")]
+        public ActionResult GetImageMiniature(string id, int frame = 0)
         {
-            int frame = int.Parse(Request["frame"] ?? "0");
-
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 

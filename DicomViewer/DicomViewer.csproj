@@ -125,6 +125,7 @@
     <Compile Include="Controllers\DicomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartialController.cs" />
+    <Compile Include="Controllers\Sticker.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -217,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Stickers\" />
     <Folder Include="Views\Partial\" />
   </ItemGroup>
   <ItemGroup>
