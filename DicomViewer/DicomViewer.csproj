@@ -46,6 +46,12 @@
     <Reference Include="Dicom.Native">
       <HintPath>..\packages\fo-dicom.1.0.37\lib\net40\Dicom.Native.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
@@ -125,7 +131,14 @@
     <Compile Include="Controllers\DicomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartialController.cs" />
-    <Compile Include="Controllers\Sticker.cs" />
+    <Compile Include="Controllers\StickersController.cs" />
+    <Compile Include="Migrations\201506091902500_init.cs" />
+    <Compile Include="Migrations\201506091902500_init.Designer.cs">
+      <DependentUpon>201506091902500_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\Sticker.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -218,8 +231,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Stickers\" />
     <Folder Include="Views\Partial\" />
+    <Folder Include="Views\Stickers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -227,6 +240,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201506091902500_init.resx">
+      <DependentUpon>201506091902500_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

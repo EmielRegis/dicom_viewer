@@ -11,16 +11,17 @@ namespace DicomViewer.Controllers
         public int YPixelCoordinate { get; set; }
         public string Author { get; set; }
         public string DicomFilename { get; set; }
-        public string NAME { get; set; }
+        public int FrameNumber { get; set; }
 
         public Sticker()
         {
-            Id = new Guid().ToString();
+            Id = Guid.NewGuid().ToString();
             Title = "";
             Content = "";
             XPixelCoordinate = 0;
             YPixelCoordinate = 0;
             Author = "";
+            FrameNumber = 0;
         }
     }
 }
