@@ -9,6 +9,7 @@ using System.Net;
 using Dicom;
 using Dicom.Imaging;
 using DicomViewer.Models;
+using DicomViewer.Library;
 
 namespace DicomViewer.Controllers
 {
@@ -29,8 +30,32 @@ namespace DicomViewer.Controllers
             return View(model);
         }
 
+        public ActionResult GetFramesCount(string id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            try
+            {
+                var path = HttpContext.Server.MapPath(@"~/Content/Dicom_Files/" + id + ".dcm");
+
+                DicomFile dicomFile = DicomFile.Open(path);
+                DicomDataset dataset = dicomFile.Dataset;
+
+                DicomImage dicomImage = new DicomImage(dataset);
+
+                return Json(dicomImage.NumberOfFrames);
+            }
+            catch (Exception)
+            {
+                return Json(-1);
+            }
+        }
+
         public ActionResult GetImage(string id)
         {
+            int frame = int.Parse(Request["frame"] ?? "0");
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -46,8 +71,9 @@ namespace DicomViewer.Controllers
                 dataset.Add(DicomTag.WindowCenter, "100.0");
                 //dataset.Add(DicomTag.PhotometricInterpretation, "MONOCHROME1"); //ValueRepresentations tag is broken
                 dataset.Add(new DicomCodeString(DicomTag.PhotometricInterpretation, "MONOCHROME1"));
-                DicomImage dicomIimage = new DicomImage(dataset);
-                Image image = dicomIimage.RenderImage();
+                DicomImage dicomImage = new DicomImage(dataset);
+
+                Image image = dicomImage.RenderImage(frame);
 
                 MemoryStream ms = new MemoryStream();
 
@@ -59,6 +85,48 @@ namespace DicomViewer.Controllers
             {
                 var path = HttpContext.Server.MapPath(@"~/Content/Images/einsteinfound.jpg");
                 Image image = System.Drawing.Image.FromFile(path);
+
+                MemoryStream ms = new MemoryStream();
+
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                
+                return File(ms.ToArray(), "image/png");
+            }
+        }
+
+        public ActionResult GetImageMiniature(string id)
+        {
+            int frame = int.Parse(Request["frame"] ?? "0");
+
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            try
+            {
+                var path = HttpContext.Server.MapPath(@"~/Content/Dicom_Files/" + id + ".dcm");
+
+                DicomFile dicomFile = DicomFile.Open(path);
+                DicomDataset dataset = dicomFile.Dataset;
+                DicomFileFormat fileFormat = dicomFile.Format;
+                DicomFileMetaInformation metaInfo = dicomFile.FileMetaInfo;
+                //dataset.Set(DicomTag.WindowWidth, 200.0); //the WindowWidth must be non-zero
+                dataset.Add(DicomTag.WindowCenter, "100.0");
+                //dataset.Add(DicomTag.PhotometricInterpretation, "MONOCHROME1"); //ValueRepresentations tag is broken
+                dataset.Add(new DicomCodeString(DicomTag.PhotometricInterpretation, "MONOCHROME1"));
+                DicomImage dicomImage = new DicomImage(dataset);
+
+                Image image = dicomImage.RenderImage(frame).ScaleImage(200, 200); ;
+
+                MemoryStream ms = new MemoryStream();
+
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+                return File(ms.ToArray(), "image/png");
+            }
+            catch (Exception)
+            {
+                var path = HttpContext.Server.MapPath(@"~/Content/Images/einsteinfound.jpg");
+                Image image = System.Drawing.Image.FromFile(path).ScaleImage(200, 200);
 
                 MemoryStream ms = new MemoryStream();
 
@@ -78,9 +146,6 @@ namespace DicomViewer.Controllers
 
             var dicomMetaDataCollection = new List<DicomListViewModel>();
             var dicomDataSetCollection = new List<DicomListViewModel>();
-            
-
-
 
             try
             {
