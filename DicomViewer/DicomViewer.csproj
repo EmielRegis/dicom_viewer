@@ -154,7 +154,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="js\application.js" />
+    <Content Include="js\canvas.js" />
+    <Content Include="js\miniatureMenu.js" />
+    <Content Include="js\main.js" />
     <Content Include="License.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -228,6 +230,7 @@
     <Content Include="Views\Dicom\Details.cshtml" />
     <Content Include="Views\Dicom\Image.cshtml" />
     <Content Include="Views\Shared\_FileBrowser.cshtml" />
+    <Content Include="Views\Dicom\MiniatureMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -23,6 +23,10 @@ textarea {
     max-width: 280px;
 }
 
+canvas {
+    position: relative;
+}
+
 span.img-name {
     cursor: pointer;
 }
@@ -30,4 +34,27 @@ span.img-name {
 .zoom-change-area {
     position: absolute;
     top: 0;
+}
+
+.miniature-menu {
+    bottom: 30px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.miniature-menu li {
+    display: inline-block;
+    
+}
+
+.miniature-menu li img {
+    cursor: pointer;
+    top: 0;
+    height: 50px;
+    margin-left: 10px;
+     -webkit-transition: height 2s, width 1s; 
+    transition: height 2s, width 1s;
+    
 }
