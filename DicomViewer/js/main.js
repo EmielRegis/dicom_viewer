@@ -6,13 +6,8 @@ $(document).ready(function () {
         loadMainContent(url);
         loadMiniaturesMenu(url);
         if (canvas) {
-            unbindZoomCallback();
-            fillCanvas(canvas, url);
-            enableZoom(canvas, url);
-        }
-        else {
-            loadMainContent(url);
-            loadMiniaturesMenu(url);
+            redrawCanvas(canvas, url);
         }
     });
+    clearModalCallback();
 });

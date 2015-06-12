@@ -106,3 +106,9 @@ function unbindZoomCallback() {
     $('input.left').unbind('click');
     $('input.right').unbind('click');
 }
+
+function redrawCanvas(canvas, url) {
+    unbindZoomCallback();
+    fillCanvas(canvas, url);
+    enableZoom(canvas, url);
+}

@@ -231,6 +231,7 @@
     <Content Include="Views\Dicom\Image.cshtml" />
     <Content Include="Views\Shared\_FileBrowser.cshtml" />
     <Content Include="Views\Dicom\MiniatureMenu.cshtml" />
+    <Content Include="Views\Dicom\_Modal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

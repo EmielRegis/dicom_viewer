@@ -11,16 +11,43 @@ function setAllMiniatures(number, name) {
     }
 }
 
+function showModal(name) {
+    $('#option-modal .photo img').attr('src', name);
+    $('#option-modal').modal('show');
+}
+
+function accept(canvas, newUrl) {
+    $('#option-modal .accept').on('click', function () {
+        redrawCanvas(canvas, newUrl);
+        $('#option-modal').modal('hide');
+       
+    });
+}
+
+function clearModalCallback() {
+    $('#option-modal').on('hidden.bs.modal', function () {
+        console.log('close');
+        $('#option-modal .accept').unbind('click');
+        $('#option-modal').unbind('hidden.bs.modal');
+    })
+}
+
 function loadMiniaturesMenu(url) {
     reqUrl = '/Dicom/GetFramesCount/' + url;
-    console.log(reqUrl);
     $.ajax({
         url: reqUrl, success: function (result) {
             setAllMiniatures(parseInt(result), url);
-            $('img').on('click', function () {
-                console.log('click');
+            $('.miniature-menu .miniature-img img').on('click', function () {
                 var name = $(this).attr('src');
-                console.log(name);
+                showModal(name);
+                canvas = document.getElementById("canvas");
+              
+                var res = name.split("/");
+                console.log(res);
+                var newUrl = res[res.length - 2] + '/' + res[res.length - 1];
+                console.log(newUrl);
+                accept(canvas, newUrl);
+                clearModalCallback();
             });
         }
     });

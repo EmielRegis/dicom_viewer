@@ -58,3 +58,12 @@ span.img-name {
     transition: height 2s, width 1s;
     
 }
+#option-modal .modal-body .group {
+    width: 50%;
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: middle;
+}
+#option-modal .modal-body .photo {
+    display: inline-block;
+}
