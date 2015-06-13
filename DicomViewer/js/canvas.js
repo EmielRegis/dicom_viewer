@@ -79,7 +79,7 @@ function loadMainContent(url) {
             $(".main-content").empty();
             $(".main-content").append(result);
             reFillCanvasAfterAjax(url);
-            enableZoom(url);
+            enableZoom(url, true);
         }
     });
 }
