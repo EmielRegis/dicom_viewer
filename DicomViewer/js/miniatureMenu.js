@@ -13,12 +13,23 @@ function setAllMiniatures(number, name) {
 
 function showModal(name) {
     $('#option-modal .photo img').attr('src', name);
+    $('#option-modal .group input[value="All"]').attr('checked', true);
     $('#option-modal').modal('show');
 }
-
-function accept(canvas, newUrl) {
+var i = 0;
+function accept(newUrl) {
     $('#option-modal .accept').on('click', function () {
-        redrawCanvas(canvas, newUrl);
+        var val = $("input[type='radio']:checked").val();
+        switch(val) {
+            case 'Right': 
+                fillRightCanvas(newUrl);
+                break;
+            case 'Left':
+                redrawCanvas(newUrl, true);
+                break;
+            default:
+                redrawCanvas(newUrl);
+        }
         $('#option-modal').modal('hide');
        
     });
@@ -26,7 +37,7 @@ function accept(canvas, newUrl) {
 
 function clearModalCallback() {
     $('#option-modal').on('hidden.bs.modal', function () {
-        console.log('close');
+        console.log('')
         $('#option-modal .accept').unbind('click');
         $('#option-modal').unbind('hidden.bs.modal');
     })
@@ -40,13 +51,12 @@ function loadMiniaturesMenu(url) {
             $('.miniature-menu .miniature-img img').on('click', function () {
                 var name = $(this).attr('src');
                 showModal(name);
-                canvas = document.getElementById("canvas");
               
                 var res = name.split("/");
                 console.log(res);
                 var newUrl = res[res.length - 2] + '/' + res[res.length - 1];
                 console.log(newUrl);
-                accept(canvas, newUrl);
+                accept(newUrl);
                 clearModalCallback();
             });
         }

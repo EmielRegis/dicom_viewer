@@ -6,7 +6,7 @@ $(document).ready(function () {
         loadMainContent(url);
         loadMiniaturesMenu(url);
         if (canvas) {
-            redrawCanvas(canvas, url);
+            redrawCanvas(url);
         }
     });
     clearModalCallback();

@@ -23,6 +23,11 @@ textarea {
     max-width: 280px;
 }
 
+.canvas-container {
+    display: inline-block;
+    position: relative;
+}
+
 canvas {
     position: relative;
 }
@@ -32,6 +37,7 @@ span.img-name {
 }
 
 .zoom-change-area {
+    z-index: 1;
     position: absolute;
     top: 0;
 }
