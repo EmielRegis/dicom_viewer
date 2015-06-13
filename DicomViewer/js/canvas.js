@@ -12,9 +12,7 @@ function fillCanvas(url, pos) {
     var canvasR = document.getElementById('canvas-right');
     var ctxR = canvasR.getContext("2d");
     var ctx = canvasL.getContext("2d");
-    ctx.clearRect(0, 0, canvasL.width, canvasL.height);
-   
-    
+    ctx.clearRect(0, 0, canvasL.width, canvasL.height); 
     ctx.canvas.width = wid;
     ctx.canvas.height = parseInt(window.innerHeight) - 130;
     imageObj = new Image();
@@ -89,133 +87,170 @@ function reFillCanvasAfterAjax(url) {
     fillCanvas(url);
 }
 
-function enableZoom(url) {
+function enableZoom(url, left) {
     var zoomL = 1, zoomR = 1, translationL = {}, translationR = {};
     translationR.x = 0;
     translationR.y = 0;
     translationL.x = 0;
     translationL.y = 0;
-    $('.canvas-left button.zoom-change').on('click', function () {
-        if ($(this).hasClass('zoom-in')) {
-            zoomL += 0.25;
-        } else {
-            if (zoomL > 0.25) zoomL -= 0.25;
-        }
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
+    if (left) {
+        $('.canvas-left button.zoom-change').on('click', function () {
+            if ($(this).hasClass('zoom-in')) {
+                zoomL += 0.25;
+            } else {
+                if (zoomL > 0.25) zoomL -= 0.25;
+            }
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
 
-    });
+        });
 
-    $('.canvas-right button.zoom-change').on('click', function () {
-        if ($(this).hasClass('zoom-in')) {
-            zoomR += 0.25;
-        } else {
-            if (zoomR > 0.25) zoomR -= 0.25;
-        }
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
+        $('#canvas').bind('mousewheel', function (e) {
+            if (e.originalEvent.wheelDelta / 120 > 0) {
+                zoomL += 0.25;
+            }
+            else {
+                if (zoomL > 0.25) zoomL -= 0.25;
+            }
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
+        });
 
-    });
+        $('.canvas-left button.up').on('click', function () {
+            translationL.y += 5;
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
+        });
 
-    $('#canvas').bind('mousewheel', function (e) {
-        if (e.originalEvent.wheelDelta / 120 > 0) {
-            zoomL += 0.25;
-        }
-        else {
-            if (zoomL > 0.25) zoomL -= 0.25;
-        }
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
-    });
+        $('.canvas-left button.down').on('click', function () {
+            translationL.y -= 5;
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
+        });
 
-    $('#canvas-right').bind('mousewheel', function (e) {
-        if (e.originalEvent.wheelDelta / 120 > 0) {
-            zoomR += 0.25;
-        }
-        else {
-            if (zoomR > 0.25) zoomR -= 0.25;
-        }
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
-    });
+        $('.canvas-left button.left').on('click', function () {
+            translationL.x += 5;
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
+        });
 
-    $('.canvas-left button.up').on('click', function () {
-        translationL.y += 5;
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
-    });
+        $('.canvas-left button.right').on('click', function () {
+            translationL.x -= 5;
+            if (url) {
+                changeZoomAndTranslat(true, translationL, zoomL, url);
+            }
+        });
+    } else {
 
-    $('.canvas-right button.up').on('click', function () {
-        translationR.y += 5;
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
-    });
+        $('.canvas-right button.zoom-change').on('click', function () {
+            if ($(this).hasClass('zoom-in')) {
+                zoomR += 0.25;
+            } else {
+                if (zoomR > 0.25) zoomR -= 0.25;
+            }
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
 
-    $('.canvas-left button.down').on('click', function () {
-        translationL.y -= 5;
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
-    });
+        });
 
-    $('.canvas-right button.down').on('click', function () {
-        translationR.y -= 5;
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
-    });
 
-    $('.canvas-left button.left').on('click', function () {
-        translationL.x += 5;
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
-    });
 
-    $('.canvas-right button.left').on('click', function () {
-        translationR.x += 5;
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
-    });
+        $('#canvas-right').bind('mousewheel', function (e) {
+            if (e.originalEvent.wheelDelta / 120 > 0) {
+                zoomR += 0.25;
+            }
+            else {
+                if (zoomR > 0.25) zoomR -= 0.25;
+            }
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
+        });
 
-    $('.canvas-left button.right').on('click', function () {
-        translationL.x -= 5;
-        if (url) {
-            changeZoomAndTranslat(true, translationL, zoomL, url);
-        }
-    });
 
-    $('.canvas-right button.right').on('click', function () {
-        translationR.x -= 5;
-        if (url) {
-            changeZoomAndTranslat(false, translationR, zoomR, url);
-        }
-    });
+
+        $('.canvas-right button.up').on('click', function () {
+            translationR.y += 5;
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
+        });
+
+
+
+        $('.canvas-right button.down').on('click', function () {
+            translationR.y -= 5;
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
+        });
+
+
+
+        $('.canvas-right button.left').on('click', function () {
+            translationR.x += 5;
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
+        });
+
+
+
+        $('.canvas-right button.right').on('click', function () {
+            translationR.x -= 5;
+            if (url) {
+                changeZoomAndTranslat(false, translationR, zoomR, url);
+            }
+        });
+    }
 }
 
 function unbindZoomCallback() {
-    $('button.zoom-change').unbind('click');
-    $('#canvas').unbind("mousewheel");
-    $('#canvas-right').unbind("mousewheel");
+    unbindLeftZoomCallback();
+    unbindRightZoomCallback();
+}
+
+function unbindLeftZoomCallback() {
+    $('.canvas-left button.zoom-change').unbind('click');
     $('.canvas-left button.up').unbind('click');
     $('.canvas-left button.down').unbind('click');
     $('.canvas-left button.left').unbind('click');
     $('.canvas-left button.right').unbind('click');
+    $('#canvas').unbind("mousewheel");
+}
+
+function unbindRightZoomCallback() {
+    $('.canvas-right button.zoom-change').unbind('click');
+    $('#canvas-right').unbind("mousewheel");
     $('.canvas-right button.up').unbind('click');
     $('.canvas-right button.down').unbind('click');
     $('.canvas-right button.left').unbind('click');
     $('.canvas-right button.right').unbind('click');
 }
 
-function redrawCanvas(url, pos) {
-    unbindZoomCallback();
-    fillCanvas(url, pos);
-    enableZoom(url);
+function redrawCanvas(url, val) {
+    
+    switch (val) {
+        case 'Right':
+            unbindRightZoomCallback();
+            fillRightCanvas(url);
+            enableZoom(url, false);
+            break;
+        case 'Left':
+            unbindLeftZoomCallback();
+            fillCanvas(url, true);
+            enableZoom(url, true);
+            break;
+        default:
+            unbindZoomCallback();
+            fillCanvas(url);
+            enableZoom(url, true);
+    }
+    
 }

@@ -16,20 +16,12 @@ function showModal(name) {
     $('#option-modal .group input[value="All"]').attr('checked', true);
     $('#option-modal').modal('show');
 }
-var i = 0;
 function accept(newUrl) {
     $('#option-modal .accept').on('click', function () {
         var val = $("input[type='radio']:checked").val();
-        switch(val) {
-            case 'Right': 
-                fillRightCanvas(newUrl);
-                break;
-            case 'Left':
-                redrawCanvas(newUrl, true);
-                break;
-            default:
-                redrawCanvas(newUrl);
-        }
+        // unbindZoomCallback();
+        redrawCanvas(newUrl, val);
+        //enableZoom(url);
         $('#option-modal').modal('hide');
        
     });
@@ -37,7 +29,6 @@ function accept(newUrl) {
 
 function clearModalCallback() {
     $('#option-modal').on('hidden.bs.modal', function () {
-        console.log('')
         $('#option-modal .accept').unbind('click');
         $('#option-modal').unbind('hidden.bs.modal');
     })
