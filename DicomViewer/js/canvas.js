@@ -28,6 +28,7 @@ function fillCanvas(url, pos) {
 
 }
 function fillRightCanvas(url) {
+    $('.canvas-container.canvas-right').removeClass('hidden');
     var canvasL = document.getElementById('canvas');
     var canvasR = document.getElementById('canvas-right');
     if (canvasL.width > ($('.main-content').width()) / 2) {
@@ -38,21 +39,14 @@ function fillRightCanvas(url) {
     var ctx = canvasR.getContext("2d");
     ctx.canvas.width = Math.floor($('.main-content').width() / 2) - 2;
     ctx.canvas.height = parseInt(window.innerHeight) - 130;
-    var scale, translat;
-    if (!scale) scale = 1;
     imageObj = new Image();
     imageObj.onload = function () {
         var width = imageObj.naturalWidth;
         var height = imageObj.naturalHeight;
         ctx.translate(canvasL.width / 2, canvasL.height / 2);
-        ctx.scale(scale, scale);
-        if (translat) {
-            ctx.translate(translat.x, translat.y);
-        }
         ctx.drawImage(imageObj, -width / 2, -height / 2);
     };
     imageObj.src = '/Dicom/GetImage/' + url;
-    $('.canvas-container.canvas-right').toggleClass('hidden');
 }
 
 function changeZoomAndTranslat(left, translat, scale, url) {
