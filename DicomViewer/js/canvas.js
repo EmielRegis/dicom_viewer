@@ -95,113 +95,128 @@ function reFillCanvasAfterAjax(url) {
 }
 
 function enableZoom(url) {
-    var zoom = 1; translation = {};
-    translation.x = 0;
-    translation.y = 0;
-    $('input.zoom-change').on('click', function () {
+    var zoomL = 1, zoomR = 1, translationL = {}, translationR = {};
+    translationR.x = 0;
+    translationR.y = 0;
+    translationL.x = 0;
+    translationL.y = 0;
+    $('.canvas-left button.zoom-change').on('click', function () {
         if ($(this).hasClass('zoom-in')) {
-            zoom += 0.25;
+            zoomL += 0.25;
         } else {
-            if (zoom > 0.25) zoom -= 0.25;
+            if (zoomL > 0.25) zoomL -= 0.25;
         }
         if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(true, translationL, zoomL, url);
         }
 
     });
-    $('#canvas').bind('mousewheel', function (e) {
-        if (e.originalEvent.wheelDelta / 120 > 0) {
-            zoom += 0.25;
-        }
-        else {
-            if (zoom > 0.25) zoom -= 0.25;
+
+    $('.canvas-right button.zoom-change').on('click', function () {
+        if ($(this).hasClass('zoom-in')) {
+            zoomR += 0.25;
+        } else {
+            if (zoomR > 0.25) zoomR -= 0.25;
         }
         if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(false, translationR, zoomR, url);
+        }
+
+    });
+
+    $('#canvas').bind('mousewheel', function (e) {
+        if (e.originalEvent.wheelDelta / 120 > 0) {
+            zoomL += 0.25;
+        }
+        else {
+            if (zoomL > 0.25) zoomL -= 0.25;
+        }
+        if (url) {
+            changeZoomAndTranslat(true, translationL, zoomL, url);
         }
     });
 
     $('#canvas-right').bind('mousewheel', function (e) {
         if (e.originalEvent.wheelDelta / 120 > 0) {
-            zoom += 0.25;
+            zoomR += 0.25;
         }
         else {
-            if (zoom > 0.25) zoom -= 0.25;
+            if (zoomR > 0.25) zoomR -= 0.25;
         }
         if (url) {
-            changeZoomAndTranslat(false, translation, zoom, url);
-        }
-    });
-
-    $('.canvas-left input.up').on('click', function () {
-        translation.y += 5;
-        if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(false, translationR, zoomR, url);
         }
     });
 
-    $('.canvas-right input.up').on('click', function () {
-        translation.y += 5;
+    $('.canvas-left button.up').on('click', function () {
+        translationL.y += 5;
         if (url) {
-            changeZoomAndTranslat(false, translation, zoom, url);
+            changeZoomAndTranslat(true, translationL, zoomL, url);
         }
     });
 
-    $('.canvas-left input.down').on('click', function () {
-        translation.y -= 5;
+    $('.canvas-right button.up').on('click', function () {
+        translationR.y += 5;
         if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(false, translationR, zoomR, url);
         }
     });
 
-    $('.canvas-right input.down').on('click', function () {
-        translation.y -= 5;
+    $('.canvas-left button.down').on('click', function () {
+        translationL.y -= 5;
         if (url) {
-            changeZoomAndTranslat(false, translation, zoom, url);
+            changeZoomAndTranslat(true, translationL, zoomL, url);
         }
     });
 
-    $('.canvas-left input.left').on('click', function () {
-        translation.x += 5;
+    $('.canvas-right button.down').on('click', function () {
+        translationR.y -= 5;
         if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(false, translationR, zoomR, url);
         }
     });
 
-    $('.canvas-right input.left').on('click', function () {
-        translation.x += 5;
+    $('.canvas-left button.left').on('click', function () {
+        translationL.x += 5;
         if (url) {
-            changeZoomAndTranslat(false, translation, zoom, url);
+            changeZoomAndTranslat(true, translationL, zoomL, url);
         }
     });
 
-    $('.canas-left input.right').on('click', function () {
-        translation.x -= 5;
+    $('.canvas-right button.left').on('click', function () {
+        translationR.x += 5;
         if (url) {
-            changeZoomAndTranslat(true, translation, zoom, url);
+            changeZoomAndTranslat(false, translationR, zoomR, url);
         }
     });
 
-    $('.canvas-right input.right').on('click', function () {
-        translation.x -= 5;
+    $('.canvas-left button.right').on('click', function () {
+        translationL.x -= 5;
         if (url) {
-            changeZoomAndTranslat(false, translation, zoom, url);
+            changeZoomAndTranslat(true, translationL, zoomL, url);
+        }
+    });
+
+    $('.canvas-right button.right').on('click', function () {
+        translationR.x -= 5;
+        if (url) {
+            changeZoomAndTranslat(false, translationR, zoomR, url);
         }
     });
 }
 
 function unbindZoomCallback() {
-    $('input.zoom-change').unbind('click');
+    $('button.zoom-change').unbind('click');
     $('#canvas').unbind("mousewheel");
     $('#canvas-right').unbind("mousewheel");
-    $('.canvas-left input.up').unbind('click');
-    $('.canvas-left input.down').unbind('click');
-    $('.canvas-left input.left').unbind('click');
-    $('.canvas-left input.right').unbind('click');
-    $('.canvas-right input.up').unbind('click');
-    $('.canvas-right input.down').unbind('click');
-    $('.canvas-right input.left').unbind('click');
-    $('.canvas-right input.right').unbind('click');
+    $('.canvas-left button.up').unbind('click');
+    $('.canvas-left button.down').unbind('click');
+    $('.canvas-left button.left').unbind('click');
+    $('.canvas-left button.right').unbind('click');
+    $('.canvas-right button.up').unbind('click');
+    $('.canvas-right button.down').unbind('click');
+    $('.canvas-right button.left').unbind('click');
+    $('.canvas-right button.right').unbind('click');
 }
 
 function redrawCanvas(url, pos) {
