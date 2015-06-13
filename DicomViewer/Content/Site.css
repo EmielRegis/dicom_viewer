@@ -32,6 +32,10 @@ canvas {
     position: relative;
 }
 
+.canvas-right {
+    float: right;
+}
+
 span.img-name {
     cursor: pointer;
 }

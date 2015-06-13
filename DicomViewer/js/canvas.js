@@ -1,12 +1,12 @@
 ﻿var imageObj, zoomCallback;
 function fillCanvas(url, pos) {
     var wid = $('.main-content').width();
+    $('.canvas-container.canvas-left').removeClass('hidden');
     if (pos) {
         wid = Math.floor(wid / 2) - 2;
     }
     else {
         $('.canvas-container.canvas-right').addClass('hidden');
-        $('.canvas-container.canvas-left').removeClass('hidden');
     }
     var canvasL = document.getElementById('canvas');
     var canvasR = document.getElementById('canvas-right');
@@ -32,6 +32,7 @@ function fillRightCanvas(url) {
     var canvasL = document.getElementById('canvas');
     var canvasR = document.getElementById('canvas-right');
     if (canvasL.width > ($('.main-content').width()) / 2) {
+        $('.canvas-container.canvas-left').addClass('hidden');
         var ctxL = canvasL.getContext("2d");
         ctxL.clearRect(0, 0, canvasL.width, canvasL.height);
         ctxL.canvas.width = Math.floor($('.main-content').width() / 2) - 2;
