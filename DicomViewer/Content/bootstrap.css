@@ -2408,7 +2408,6 @@ input[type="button"].btn-block {
   -webkit-font-smoothing: antialiased;
   font-style: normal;
   font-weight: normal;
-  line-height: 1;
 }
 
 .glyphicon-asterisk:before {

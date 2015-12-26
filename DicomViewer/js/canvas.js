@@ -1,29 +1,29 @@
 ﻿var imageObj, zoomCallback;
-function fillCanvas(url, pos) {
-    var wid = $('.main-content').width();
-    $('.canvas-container.canvas-left').removeClass('hidden');
-    if (pos) {
-        wid = Math.floor(wid / 2) - 2;
-    }
-    else {
-        $('.canvas-container.canvas-right').addClass('hidden');
-    }
-    var canvasL = document.getElementById('canvas');
-    var canvasR = document.getElementById('canvas-right');
-    var ctxR = canvasR.getContext("2d");
-    var ctx = canvasL.getContext("2d");
-    ctx.clearRect(0, 0, canvasL.width, canvasL.height); 
-    ctx.canvas.width = wid;
-    ctx.canvas.height = parseInt(window.innerHeight) - 130;
+function drawOnCanvas(canvas, ctx, url) {
     imageObj = new Image();
     imageObj.onload = function () {
         var width = imageObj.naturalWidth;
         var height = imageObj.naturalHeight;
-        ctx.translate(canvasL.width / 2, canvasL.height / 2);
+        ctx.translate(canvas.width / 2, canvas.height / 2);
         ctx.drawImage(imageObj, -width / 2, -height / 2);
     };
     imageObj.src = '/Dicom/GetImage/' + url;
+}
 
+function fillCanvas(url, half) {
+    var wid = $('.main-content').width();
+    $('.canvas-container.canvas-left').removeClass('hidden');
+    if (half) {
+        wid = Math.floor(wid / 2) - 2;
+    } else {
+        $('.canvas-container.canvas-right').addClass('hidden');
+    }
+    var canvasL = document.getElementById('canvas');
+    var ctx = canvasL.getContext("2d");
+    ctx.clearRect(0, 0, canvasL.width, canvasL.height); 
+    ctx.canvas.width = wid;
+    ctx.canvas.height = parseInt(window.innerHeight) - 130;
+    drawOnCanvas(canvasL, ctx, url);
 }
 function fillRightCanvas(url) {
     $('.canvas-container.canvas-right').removeClass('hidden');
@@ -38,24 +38,11 @@ function fillRightCanvas(url) {
     var ctx = canvasR.getContext("2d");
     ctx.canvas.width = Math.floor($('.main-content').width() / 2) - 2;
     ctx.canvas.height = parseInt(window.innerHeight) - 130;
-    imageObj = new Image();
-    imageObj.onload = function () {
-        var width = imageObj.naturalWidth;
-        var height = imageObj.naturalHeight;
-        ctx.translate(canvasL.width / 2, canvasL.height / 2);
-        ctx.drawImage(imageObj, -width / 2, -height / 2);
-    };
-    imageObj.src = '/Dicom/GetImage/' + url;
+    drawOnCanvas(canvasL, ctx, url);
 }
 
-function changeZoomAndTranslat(left, translat, scale, url) {
-    console.log('change');
-    var canvas;
-    if (left) {
-        canvas = document.getElementById('canvas');
-    } else {
-       canvas = document.getElementById('canvas-right');
-    }
+function changeZoomAndTranslat(canv, translat, scale, url) {
+    var canvas = document.getElementById(canv);
     var ctx = canvas.getContext("2d");
     canvas.width = canvas.width;
     imageObj = new Image();
@@ -78,13 +65,10 @@ function loadMainContent(url) {
         url: reqUrl, success: function (result) {
             $(".main-content").empty();
             $(".main-content").append(result);
-            reFillCanvasAfterAjax(url);
+            fillCanvas(url);
             enableZoom(url, true);
         }
     });
-}
-function reFillCanvasAfterAjax(url) {
-    fillCanvas(url);
 }
 
 function enableZoom(url, left) {
@@ -101,11 +85,9 @@ function enableZoom(url, left) {
                 if (zoomL > 0.25) zoomL -= 0.25;
             }
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
-
         });
-
         $('#canvas').bind('mousewheel', function (e) {
             if (e.originalEvent.wheelDelta / 120 > 0) {
                 zoomL += 0.25;
@@ -114,39 +96,38 @@ function enableZoom(url, left) {
                 if (zoomL > 0.25) zoomL -= 0.25;
             }
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
         });
 
         $('.canvas-left button.up').on('click', function () {
             translationL.y += 5;
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
         });
 
         $('.canvas-left button.down').on('click', function () {
             translationL.y -= 5;
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
         });
 
         $('.canvas-left button.left').on('click', function () {
             translationL.x += 5;
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
         });
 
         $('.canvas-left button.right').on('click', function () {
             translationL.x -= 5;
             if (url) {
-                changeZoomAndTranslat(true, translationL, zoomL, url);
+                changeZoomAndTranslat('canvas', translationL, zoomL, url);
             }
         });
     } else {
-
         $('.canvas-right button.zoom-change').on('click', function () {
             if ($(this).hasClass('zoom-in')) {
                 zoomR += 0.25;
@@ -154,12 +135,10 @@ function enableZoom(url, left) {
                 if (zoomR > 0.25) zoomR -= 0.25;
             }
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
 
         });
-
-
 
         $('#canvas-right').bind('mousewheel', function (e) {
             if (e.originalEvent.wheelDelta / 120 > 0) {
@@ -169,43 +148,35 @@ function enableZoom(url, left) {
                 if (zoomR > 0.25) zoomR -= 0.25;
             }
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
         });
-
-
 
         $('.canvas-right button.up').on('click', function () {
             translationR.y += 5;
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
         });
-
-
 
         $('.canvas-right button.down').on('click', function () {
             translationR.y -= 5;
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
         });
-
-
 
         $('.canvas-right button.left').on('click', function () {
             translationR.x += 5;
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
         });
-
-
 
         $('.canvas-right button.right').on('click', function () {
             translationR.x -= 5;
             if (url) {
-                changeZoomAndTranslat(false, translationR, zoomR, url);
+                changeZoomAndTranslat('canvas-right', translationR, zoomR, url);
             }
         });
     }
@@ -217,21 +188,13 @@ function unbindZoomCallback() {
 }
 
 function unbindLeftZoomCallback() {
-    $('.canvas-left button.zoom-change').unbind('click');
-    $('.canvas-left button.up').unbind('click');
-    $('.canvas-left button.down').unbind('click');
-    $('.canvas-left button.left').unbind('click');
-    $('.canvas-left button.right').unbind('click');
+    $('.canvas-left button').unbind('click');
     $('#canvas').unbind("mousewheel");
 }
 
 function unbindRightZoomCallback() {
-    $('.canvas-right button.zoom-change').unbind('click');
+    $('.canvas-right button').unbind('click');
     $('#canvas-right').unbind("mousewheel");
-    $('.canvas-right button.up').unbind('click');
-    $('.canvas-right button.down').unbind('click');
-    $('.canvas-right button.left').unbind('click');
-    $('.canvas-right button.right').unbind('click');
 }
 
 function redrawCanvas(url, val) {
